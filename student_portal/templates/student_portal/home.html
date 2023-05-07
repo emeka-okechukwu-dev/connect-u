@@ -1,0 +1,21 @@
+{% extends "student_portal/base.html" %}
+{% block title %} Connect-U Students {% endblock title%}
+{% block content %}
+    <div class="jumbotron">
+        <h1 class="display-4">Welcome, {{user.first_name.title|default:'Guest'}}</h1>
+        <p style="font-size: 18px;">
+            Connect-U is a career service platform designed to simplify job hunting for students.
+            With just a few clicks, students can create their profile and apply to job postings of their choice.
+            Find your dream job today with Connect-U!
+        </p>
+        <hr class="my-4">
+        <p class="lead">
+            {% if user.is_authenticated %}
+                <a class="btn btn-primary btn-danger" href="{% url 'student_portal-logout' %}" role="button">Logout</a>
+            {% else %}
+                <a class="btn btn-primary btn-lg btn-info" href="{% url 'student_portal-login' %}" role="button">Sign in</a>
+                <a class="btn btn-lg btn-info" href="{% url 'employer_portal-login' %}" role="button" style="background-color:#004085; border-color:#004085;">Employer Sign in</a>
+            {% endif %}
+        </p>
+    </div>
+{% endblock content %}

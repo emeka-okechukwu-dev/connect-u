@@ -1,0 +1,13 @@
+{% extends "student_portal/base.html" %}
+{% block title %} Logout | Connect-U Students {% endblock title%}
+{% block content %}
+    <div class="card mx-auto" style="width: 18rem;">
+        <div class="card-body text-center">
+        <h5 class="card-title">You have been logged out</h5>
+        <p class="card-text">
+            Thank you for using our platform, please feel free to come back again.
+        </p>
+        <br><hr><a href="{% url 'student_portal-login' %}" class="btn" style="background-color: #912338; color: white;">Sign in again</a>
+        </div>
+    </div>
+{% endblock content %}

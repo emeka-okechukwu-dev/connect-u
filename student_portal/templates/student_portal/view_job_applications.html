@@ -1,0 +1,96 @@
+{% extends "student_portal/base.html" %}
+{% block title %} Job Postings | Connect-U Students {% endblock title %}
+{% block content %}
+    <div class="container-fluid">
+        <h2 class="text-left mb-5" style="color: #912338;"><span class="fa fa-tasks"></span> Current Applications</h2>
+        <div class="row">
+           <form class="form-inline my-2 my-lg-0" method="GET">
+              <div class="input-group">
+                 <input class="form-control" type="search" placeholder="Search Job Title" aria-label="Search" name="search">
+                 <div class="input-group-append">
+                    <button class="btn btn-outline-info" type="submit">Search</button>
+                    {% if request.GET.search %}
+                    <a href="{% url 'student_portal-view_job_applications' %}" class="btn btn-secondary ml-2">Show All</a>
+                    {% endif %}
+                 </div>
+              </div>
+              <div class="input-group ml-3">
+                 <div class="input-group-prepend">
+                    <label class="input-group-text" for="jobType">Job Type</label>
+                 </div>
+                 <select class="custom-select" id="jobType" name="job_type">
+                 <option value="" {% if not request.GET.job_type %}selected{% endif %}>All</option>
+                 <option value="Full-time" {% if request.GET.job_type == "Full-time" %}selected{% endif %}>Full-time</option>
+                 <option value="Part-time" {% if request.GET.job_type == "Part-time" %}selected{% endif %}>Part-time</option>
+                 <option value="Contract" {% if request.GET.job_type == "Contract" %}selected{% endif %}>Contract</option>
+                 <option value="Temporary" {% if request.GET.job_type == "Temporary" %}selected{% endif %}>Temporary</option>
+                 <option value="Volunteer" {% if request.GET.job_type == "Volunteer" %}selected{% endif %}>Volunteer</option>
+                 <option value="Internship" {% if request.GET.job_type == "Internship" %}selected{% endif %}>Internship</option>
+                 <option value="Other" {% if request.GET.job_type == "Other" %}selected{% endif %}>Other</option>
+                 </select>
+                 <div class="input-group-append">
+                    <button class="btn btn-outline-info" type="submit">Filter</button>
+                    {% if request.GET.job_type %}
+                    <a href="{% url 'student_portal-view_job_applications' %}" class="btn btn-secondary ml-2">Clear Filter</a>
+                    {% endif %}
+                 </div>
+              </div>
+           </form>
+        </div>
+        <div style="margin-bottom: 20px;"></div>
+        <table class="table">
+            <caption>Job Applications Table</caption>
+            <thead style="background-color: #912338; color: white;">
+                <tr>
+                    <th class="eye-column" style="width: 1%;"></th>
+                    <th>Job Title</th>
+                    <th>Location</th>
+                    <th>Date Applied</th>
+                    <th>Status</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for job_application in job_applications %}
+                    <tr>
+                        <td class="eye-column"><a href="#" data-toggle="modal" data-target="#jobModal-{{ job_application.job_id.job_id }}"><i class="fa fa-eye" style="color: #912338;"></i></a></td>
+                        <td>{{ job_application.job_id.title }}</td>
+                        <td>{{ job_application.job_id.location }}</td>
+                        <td>{{ job_application.date_applied }}</td>
+                        <td>{{ job_application.status }}</td>
+                    </tr>
+                {% empty %}
+                    <tr>
+                        <td colspan="5">No job applications found.</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        {% for job_application in job_applications %}
+            <div class="modal fade" id="jobModal-{{ job_application.job_id.job_id }}" tabindex="-1" role="dialog" aria-labelledby="jobModalLabel-{{ job_application.job_id.job_id }}" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title" id="jobModalLabel-{{ job_application.job_id.job_id }}">{{ job_application.job_id.title }}</h5>
+                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                <span aria-hidden="true">&times;</span>
+                            </button>
+                        </div>
+                        <div class="modal-body">
+                            <p>{{ job_application.job_id.description }}</p>
+                            <p><strong>Location:</strong> {{ job_application.job_id.location }}</p>
+                            <p><strong>Company Name:</strong> {{ job_application.job_id.company_name }}</p>
+                            <p><strong>Website:</strong> <a href="{{ job_application.job_id.website }}" target="_blank" style="color: #912338;">{{ job_application.job_id.website }}</a></p>
+                            <p><strong>Type:</strong> {{ job_application.job_id.job_type }}</p>
+                            <p><strong>Category:</strong> {{ job_application.job_id.job_category }}</p>
+                            <p><strong>Requirements:</strong> {{ job_application.job_id.requirements }}</p>
+                            <p><strong>Salary:</strong> {{ job_application.job_id.salary }}</p>
+                            <p><strong>Application Deadline:</strong> {{ job_application.job_id.application_deadline }}</p>
+                            <p><strong>Contact Info:</strong> {{ job_application.job_id.contact_info }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+{% endblock %}
